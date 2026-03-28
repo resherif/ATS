@@ -3,12 +3,12 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter } from 'react-router-dom'
+const basename = import.meta.env.MODE === 'production' ? '/ats_website' : '/';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename='/ats_website'>
+    <BrowserRouter basename={basename}>
       <App />
     </BrowserRouter>
-    
   </StrictMode>,
 )
