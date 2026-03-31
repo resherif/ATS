@@ -1,18 +1,38 @@
-import { Route, Routes } from 'react-router-dom';
 import Sidebar from './components/sidebar/sidebar';
 import { useState } from 'react';
+import Navbar from './components/navbar/navbar';
+import { Route, Routes } from 'react-router-dom';
+import Dashboard from './pages/dashboard';
+import Jobs from './pages/jobs';
+import AddJobs from './pages/AddJobs';
 function App() {
+  const [IsOpen, setBarMenuIsOpen] = useState(true);
 
-  const [BarMenuIsOpen, setBarMenuIsOpen] = useState(true);
   return (
-    <>
-      <Sidebar isOpen={ BarMenuIsOpen} />
-      <Routes>
-        <Route path='' element={<h1>hello</h1>} />
-        
-      </Routes>
-    </>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+
+      <Navbar IsOpen={IsOpen} setIsOpen={setBarMenuIsOpen} />
+
+      <div className="flex flex-1">
+
+        <Sidebar isOpen={IsOpen} />
+
+
+        <main className={`flex-1 pt-14 transition-all duration-300 ${IsOpen ? 'ml-64' : 'ml-0'}`}>
+          <div className="p-8">
+            <Routes>
+              <Route path='/' element={<>Hello</>}/>
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/jobs' element={<Jobs />} />
+              <Route path='/jobs/AddJobs' element={<AddJobs />} />
+              <Route path='/jobs/edit/:id' element={<AddJobs />} />
+            </Routes>
+
+          </div>
+        </main>
+      </div>
+    </div>
   )
 }
 
-export default App
+export default App;

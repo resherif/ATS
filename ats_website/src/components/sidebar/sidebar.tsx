@@ -1,24 +1,37 @@
 import React from 'react'
-import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { FaChartPie, FaBriefcase, FaUsers, FaCalendarAlt, FaCog ,  FaHome 
+} from "react-icons/fa";
+
 type sidebarProps = {
     isOpen: boolean;
 }
-export const Sidebar = ({isOpen}:sidebarProps) => {
-    
-  return (
-      <aside className={` w-64 bg-slate-900 text-white flex-shrink-0  h-[calc(100vh-56px)]  border-r fixed left-0 top-14 z-40 shadow-sm transition-all duration-300  ${isOpen ? 'translate-x-0 w-64' : 'w-0 translate-x-full'} overflow-hidden`}>
-         <div className="p-6 text-2xl font-bold border-b border-slate-700">ATS Pro</div>
-          <nav className='d-flex flex-direction-column'>
-              <NavLink to='/dashboard' className={({isActive})=>`flex items-center gap-3 px-3 py-2 rounded-md ${isActive? 'bg-white text-blue-400':'hover:text-blue-400 '}`}>dashboard</NavLink>
-              <NavLink to='/Jobs' className='flex items-center gap-3 px-3 py-2 rounded-md'>Jobs</NavLink>
-              <NavLink to='/Candidates' className='flex items-center gap-3 px-3 py-2 rounded-md'>Candidates</NavLink>
-              <NavLink to='/Interviews' className='flex items-center gap-3 px-3 py-2 rounded-md'>Interviews</NavLink>
-              <NavLink to='/Settings' className='flex items-center gap-3 px-3 py-2 rounded-md'>Settings</NavLink>
-              
-          </nav>
-          
-    </aside>
-  )
+
+export const Sidebar = ({ isOpen }: sidebarProps) => {
+    return (
+        <aside className={`fixed left-0 top-14 z-40 bg-slate-900 text-white h-[calc(100vh-56px)] transition-all duration-300 shadow-xl overflow-hidden ${isOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full'}`}>
+            <div className="p-6 text-xs font-semibold uppercase tracking-widest text-slate-500">
+                Menu
+            </div>
+            <nav className="flex flex-col gap-2 px-3">
+                <NavLink to='/' className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}>
+                  <FaHome /> Home
+                </NavLink>
+                <NavLink to='/dashboard' className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}>
+                    <FaChartPie /> Dashboard
+                </NavLink>
+                <NavLink to='/Jobs' className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}>
+                    <FaBriefcase /> Jobs
+                </NavLink>
+                <NavLink to='/Candidates' className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}>
+                    <FaUsers /> Candidates
+                </NavLink>
+                <NavLink to='/Settings' className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}>
+                    <FaCog /> Settings
+                </NavLink>
+            </nav>
+        </aside>
+    )
 }
+
 export default Sidebar;
