@@ -25,7 +25,7 @@ function App() {
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/jobs' element={<Jobs />} />
               <Route path='/jobs/AddJobs' element={<AddJobs />} />
-              <Route path='/jobs/edit/:id' element={<AddJobs />} />
+             <Route path="/jobs/AddJobs/:id" element={<AddJobs />} />
             </Routes>
 
           </div>

@@ -1,65 +1,3 @@
-// import { supabase } from '../utils/supabaseClient';
-// import { Link } from 'react-router-dom';
-// import { useEffect, useState } from 'react';
-// type JobForm = {
-//     id: string,
-//     title: string,
-//     Department: string,
-//     location: string,
-//     employment_type: string,
-//     status: "Draft" | "published",
-//     requirements: string,
-//     Job_Description: string,
-//     Experience_Level: string,
-//     salary_range: number,
-//     posted_at: Date
-// }
-// const Jobs = () => {
-//     const [jobList, setJobList] = useState<JobForm[]>([]);
-//     useEffect(() => {
-//         fetchJobs();
-//     }, [])
-//     const fetchJobs = async () => {
-//         const { data, error } = await supabase.from("jobs").select("*");
-//         if (error) {
-//             console.log("error fetching jobs", error);
-//         }
-//         setJobList(data || []);
-//     }
-//     return (
-//         <>
-//             <Link to='/jobs/AddJobs' className='bg-[#2D68C4] p-3 mb-5 border-r-4 text-white border-none fit-content'> Add New job</Link>
-
-//             <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
-//                 <table className='border w-3xl text-center pb-3 mb-3'>
-//                     <thead  className=''>
-//                          <th>title</th>
-//                     <th>location</th>
-//                     <th>salary</th>
-//                     <th>status</th>
-//                     <th>posted_at</th>
-//                    </thead>
-//                     <tbody>
-//                         {
-//                             jobList.map((job) => (
-//                                 <tr key={job.id}>
-//                                     <td>{job.title}</td>
-//                                     <td>{job.location}</td>
-//                                     <td>{job.salary_range}</td>
-//                                     <td>{job.status}</td>
-//                                     <td>{new Date(job.posted_at).toLocaleDateString()}</td>
-//                                 </tr>
-//                             ))
-//                         }
-//                     </tbody>
-//                 </table>
-//             </div>
-//         </>
-
-//     );
-// };
-
-// export default Jobs
 import { supabase } from '../utils/supabaseClient';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -75,7 +13,7 @@ type JobForm = {
     Job_Description: string,
     Experience_Level: string,
     salary_range: number,
-    posted_at: string // يفضل string إذا كان قادماً من DB مباشرة
+    posted_at: string 
 }
 
 const Jobs = () => {
@@ -106,7 +44,7 @@ const Jobs = () => {
     }
     return (
         <div className="p-6">
-            {/* Header Section */}
+         
             <div className="flex justify-between items-center mb-8">
                 <h2 className="text-2xl font-semibold text-slate-800">Jobs Management</h2>
                 <Link
@@ -117,7 +55,7 @@ const Jobs = () => {
                 </Link>
             </div>
 
-            {/* Table Container */}
+      
             <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
                 <table className='w-full text-left border-collapse'>
                     <thead>
@@ -154,7 +92,7 @@ const Jobs = () => {
                                     </td>
                                     <td className="px-6 py-4 text-center">
                                         <div className="flex justify-center gap-3">
-                                            {/* زر التعديل - يوجه لصفحة الـ Edit مع تمرير الـ ID */}
+                                          
                                             <Link
                                                 to={`/jobs/AddJobs/${job.id}`}
                                                 className="text-blue-600 hover:text-blue-800 font-medium text-sm border border-blue-200 px-3 py-1 rounded-md hover:bg-blue-50 transition-all"
@@ -162,7 +100,7 @@ const Jobs = () => {
                                                 Edit
                                             </Link>
 
-                                            {/* زر الحذف */}
+                                           
                                             <button
                                                 onClick={() => handleDelete(job.id)}
                                                 className="text-red-600 hover:text-red-800 font-medium text-sm border border-red-200 px-3 py-1 rounded-md hover:bg-red-50 transition-all"

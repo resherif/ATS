@@ -1,6 +1,7 @@
-
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { supabase } from '../utils/supabaseClient';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 type JobForm = {
     title: string,
     Department: string,
@@ -14,40 +15,80 @@ type JobForm = {
     posted_at: Date
 }
 const AddJobs = () => {
-    const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<JobForm>({
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const isEditMode = Boolean(id);
+    const { register, handleSubmit, setError, reset, formState: { errors, isSubmitting } } = useForm<JobForm>({
         defaultValues: {
-           status: "Draft",
+            status: "Draft",
             location: "on-site"
         }
     });
+
+    useEffect(() => {
+        if (isEditMode) {
+            const fetchJobDetails = async () => {
+                const { data, error } = await supabase.from('jobs').select('*').eq('id', id).single();
+                if (data) {
+                    reset({
+                        title: data.title,
+                        Department: data.department,
+                        location: data.location,
+                        employment_type: data.employment_type,
+                        status: data.Status,
+                        requirements: data.requirements,
+                        Job_Description: data.description,
+                        Experience_Level: data.experience_level,
+                        salary_range: data.salary_range,
+                    });
+                }
+            };
+            fetchJobDetails();
+        }
+    }, [id, isEditMode, reset]);
     const onSubmit: SubmitHandler<JobForm> = async (data) => {
         try {
-            const { data: insertedData, error } = await supabase.from('jobs').insert([{
-                title: data.title,
-                description: data.Job_Description,
-                department: data.Department,
-                location: data.location,
-                employment_type: data.employment_type,
-                Status: data.status,
-                requirements: data.requirements,
-                experience_level: data.Experience_Level,
-                salary_range: data.salary_range
-            }]).select();
-            if (error) {
-                throw error;
+            if (isEditMode) {
+                const { error } = await supabase.from('jobs').update({
+                    title: data.title,
+                    description: data.Job_Description,
+                    department: data.Department,
+                    location: data.location,
+                    employment_type: data.employment_type,
+                    Status: data.status,
+                    requirements: data.requirements,
+                    experience_level: data.Experience_Level,
+                    salary_range: data.salary_range,
+                }).eq('id', id);
+                if (error) throw error;
+                alert('job updated succesfully!');
+                navigate('/jobs');
+            } else {
+                const { error } = await supabase.from('jobs').insert({
+                    title: data.title,
+                    description: data.Job_Description,
+                    department: data.Department,
+                    location: data.location,
+                    employment_type: data.employment_type,
+                    Status: data.status,
+                    requirements: data.requirements,
+                    experience_level: data.Experience_Level,
+                    salary_range: data.salary_range,
+                }).select();
+                if (error) throw error;
+                alert("Job Created Succesfully!");
+                navigate('/jobs');
             }
-            alert("Job Created Succesfully!");
-            console.log(insertedData);
-            ;
         } catch (error) {
             setError("root", {
                 message: "Something went wrong while creating the job."
             })
+
         }
     }
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
-
+            <h2 className="w-35 mb-5 text-center bg-[#2D68C4] hover:bg-blue-700 text-white  px-5 py-1 rounded-lg transition-colors duration-200 shadow-sm font-medium ">{isEditMode ? "Edit job" : "Add job"}</h2>
             <form action='' onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-2">
                     <label className="font-semibold text-gray-700">Job Title</label>
@@ -145,7 +186,7 @@ const AddJobs = () => {
                         type='submit'
                         className={`px-6 py-2 rounded text-white font-bold ${isSubmitting ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 transition'}`}
                     >
-                        {isSubmitting ? "Processing..." : "Create Job"}
+                        {isSubmitting ? "Processing..." : isEditMode ? "Update Job" : "Create Job"}
                     </button>
                 </div>
 
@@ -156,72 +197,3 @@ const AddJobs = () => {
 };
 
 export default AddJobs;
-// import { useParams, useNavigate } from 'react-router-dom';
-// import { useEffect, useState } from 'react';
-// import { supabase } from '../utils/supabaseClient';
-
-// const AddNewJob = () => {
-//     const { id } = useParams(); // يجلب الـ id من الرابط إذا كان موجوداً
-//     const navigate = useNavigate();
-//     const isEditMode = Boolean(id); // إذا وجد id فنحن في وضع التعديل
-
-//     const [formData, setFormData] = useState({
-//         title: '',
-//         location: '',
-//         salary_range: 0,
-//         // باقي الحقول...
-//     });
-
-//     // 1. إذا كان تعديل، نجلب بيانات الوظيفة القديمة ونضعها في الـ Form
-//     useEffect(() => {
-//         if (isEditMode) {
-//             const fetchJobDetails = async () => {
-//                 const { data, error } = await supabase
-//                     .from('jobs')
-//                     .select('*')
-//                     .eq('id', id)
-//                     .single();
-                
-//                 if (data) setFormData(data);
-//             };
-//             fetchJobDetails();
-//         }
-//     }, [id, isEditMode]);
-
-//     const handleSubmit = async (e: React.FormEvent) => {
-//         e.preventDefault();
-        
-//         if (isEditMode) {
-//             // منطق التحديث (Update)
-//             const { error } = await supabase
-//                 .from('jobs')
-//                 .update(formData)
-//                 .eq('id', id);
-            
-//             if (!error) navigate('/jobs');
-//         } else {
-//             // منطق الإضافة (Insert)
-//             const { error } = await supabase
-//                 .from('jobs')
-//                 .insert([formData]);
-            
-//             if (!error) navigate('/jobs');
-//         }
-//     };
-
-//     return (
-//         <div>
-//             <h2>{isEditMode ? 'Edit Job' : 'Add New Job'}</h2>
-//             <form onSubmit={handleSubmit}>
-//                 {/* Inputs مربوطة بـ formData */}
-//                 <input 
-//                     value={formData.title} 
-//                     onChange={(e) => setFormData({...formData, title: e.target.value})} 
-//                 />
-//                 <button type="submit" className="bg-[#2D68C4] text-white">
-//                     {isEditMode ? 'Update Job' : 'Save Job'}
-//                 </button>
-//             </form>
-//         </div>
-//     );
-// };
