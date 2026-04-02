@@ -1,50 +1,24 @@
-import { supabase } from '../utils/supabaseClient';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-
-type JobForm = {
-    id: string,
-    title: string,
-    Department: string,
-    location: string,
-    employment_type: string,
-    status: "Draft" | "published",
-    requirements: string,
-    Job_Description: string,
-    Experience_Level: string,
-    salary_range: number,
-    posted_at: string 
-}
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchJobs, deleteJob } from '../store/jobSlice';
+import type { RootState, AppDispatch } from '../store/store';
+import { useEffect } from 'react';
 const Jobs = () => {
-    const [jobList, setJobList] = useState<JobForm[]>([]);
+    const dispatch = useDispatch<AppDispatch>();
+    const { Jobs, loading } = useSelector((state: RootState) => state.jobs)
 
     useEffect(() => {
-        fetchJobs();
-    }, [])
-
-    const fetchJobs = async () => {
-        const { data, error } = await supabase.from("jobs").select("*");
-        if (error) {
-            console.log("error fetching jobs", error);
-        }
-        setJobList(data || []);
-    }
+        dispatch(fetchJobs());
+    }, [dispatch]);
 
     const handleDelete = async (id: string) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this job?");
-        if (confirmDelete) {
-            const { error } = await supabase.from("jobs").delete().eq("id", id);
-            if (error) {
-                console.log("Error deleting job!", error);
-            } else {
-                setJobList(jobList.filter((job) => job.id !== id))
-            }
+        if (window.confirm('Are you sure')) {
+            dispatch(deleteJob(id));
         }
     }
     return (
         <div className="p-6">
-         
+
             <div className="flex justify-between items-center mb-8">
                 <h2 className="text-2xl font-semibold text-slate-800">Jobs Management</h2>
                 <Link
@@ -55,7 +29,7 @@ const Jobs = () => {
                 </Link>
             </div>
 
-      
+
             <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
                 <table className='w-full text-left border-collapse'>
                     <thead>
@@ -68,8 +42,8 @@ const Jobs = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                        {jobList.length > 0 ? (
-                            jobList.map((job) => (
+                        {Jobs.length > 0 ? (
+                            Jobs.map((job) => (
                                 <tr key={job.id} className="hover:bg-slate-50 transition-colors duration-150">
                                     <td className="px-6 py-4 text-slate-700 font-medium">{job.title}</td>
                                     <td className="px-6 py-4">
@@ -92,7 +66,7 @@ const Jobs = () => {
                                     </td>
                                     <td className="px-6 py-4 text-center">
                                         <div className="flex justify-center gap-3">
-                                          
+
                                             <Link
                                                 to={`/jobs/AddJobs/${job.id}`}
                                                 className="text-blue-600 hover:text-blue-800 font-medium text-sm border border-blue-200 px-3 py-1 rounded-md hover:bg-blue-50 transition-all"
@@ -100,7 +74,7 @@ const Jobs = () => {
                                                 Edit
                                             </Link>
 
-                                           
+
                                             <button
                                                 onClick={() => handleDelete(job.id)}
                                                 className="text-red-600 hover:text-red-800 font-medium text-sm border border-red-200 px-3 py-1 rounded-md hover:bg-red-50 transition-all"

@@ -2,23 +2,16 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { supabase } from '../utils/supabaseClient';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-type JobForm = {
-    title: string,
-    Department: string,
-    location: string,
-    employment_type: string,
-    status: "Draft" | "published",
-    requirements: string,
-    Job_Description: string,
-    Experience_Level: string,
-    salary_range: Number,
-    posted_at: Date
-}
+import type { Job } from '../types/type';
+import { useDispatch } from 'react-redux';
+import { fetchJobs } from '../store/jobSlice';
+import type { AppDispatch } from '../store/store';
 const AddJobs = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const isEditMode = Boolean(id);
-    const { register, handleSubmit, setError, reset, formState: { errors, isSubmitting } } = useForm<JobForm>({
+    const dispatch = useDispatch<AppDispatch>();
+    const { register, handleSubmit, setError, reset, formState: { errors, isSubmitting } } = useForm<Job>({
         defaultValues: {
             status: "Draft",
             location: "on-site"
@@ -46,7 +39,7 @@ const AddJobs = () => {
             fetchJobDetails();
         }
     }, [id, isEditMode, reset]);
-    const onSubmit: SubmitHandler<JobForm> = async (data) => {
+    const onSubmit: SubmitHandler<Job> = async (data) => {
         try {
             if (isEditMode) {
                 const { error } = await supabase.from('jobs').update({
@@ -61,6 +54,7 @@ const AddJobs = () => {
                     salary_range: data.salary_range,
                 }).eq('id', id);
                 if (error) throw error;
+                dispatch(fetchJobs());
                 alert('job updated succesfully!');
                 navigate('/jobs');
             } else {
@@ -76,6 +70,7 @@ const AddJobs = () => {
                     salary_range: data.salary_range,
                 }).select();
                 if (error) throw error;
+                dispatch(fetchJobs());
                 alert("Job Created Succesfully!");
                 navigate('/jobs');
             }
