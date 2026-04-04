@@ -39,8 +39,9 @@ const jobSlice = createSlice({
             .addCase(fetchJobs.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message ?? 'failed to fetch jobs'
-            }).addCase(deleteJob.fulfilled, (state, action) => {
-                state.Jobs.filter((Job) => Job.id !== action.payload)
+            })
+            .addCase(deleteJob.fulfilled, (state, action) => {
+               state.Jobs= state.Jobs.filter((Job) => Job.id !== action.payload)
             });
         
     },

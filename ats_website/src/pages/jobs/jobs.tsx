@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchJobs, deleteJob } from '../store/jobSlice';
-import type { RootState, AppDispatch } from '../store/store';
+import { fetchJobs, deleteJob } from '../../store/jobSlice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useEffect } from 'react';
 const Jobs = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { Jobs, loading } = useSelector((state: RootState) => state.jobs)
+    const dispatch = useAppDispatch();
+    const { Jobs, loading } = useAppSelector((state) => state.jobs)
 
     useEffect(() => {
         dispatch(fetchJobs());

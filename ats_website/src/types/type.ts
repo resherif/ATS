@@ -11,3 +11,19 @@ export type Job = {
     salary_range: number,
     posted_at: string
 };
+export interface Candidates{
+   candidate_id: number,
+    candidate_name: string,
+    email: string,
+    created_at: Date,
+    skills:{
+        skill_name: string,
+        skill_id:number
+    }[],
+    application_id: number,
+    job_id: number,
+    status: "Pending" | "Screening" | "Interviewing" | "Hired" | "Rejected"; 
+    applied_at: string,
+    resume_url: string,
+    role:string,
+}

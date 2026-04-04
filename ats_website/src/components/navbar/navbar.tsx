@@ -1,5 +1,4 @@
 import React from 'react'
-import { NavLink } from "react-router-dom";
 import { FaSearch, FaBell, FaBars, FaUserCircle } from "react-icons/fa";
 
 type NavbarProps = {

@@ -1,11 +1,11 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import type { Job } from '../types/type';
+import type { Job } from '../../types/type';
 import { useDispatch } from 'react-redux';
-import { fetchJobs } from '../store/jobSlice';
-import type { AppDispatch } from '../store/store';
+import { fetchJobs } from '../../store/jobSlice';
+import type { AppDispatch } from '../../store/store';
 const AddJobs = () => {
     const { id } = useParams();
     const navigate = useNavigate();

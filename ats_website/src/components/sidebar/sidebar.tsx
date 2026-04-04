@@ -1,6 +1,5 @@
-import React from 'react'
 import { NavLink } from 'react-router-dom';
-import { FaChartPie, FaBriefcase, FaUsers, FaCalendarAlt, FaCog ,  FaHome 
+import { FaChartPie, FaBriefcase, FaUsers, FaCog ,  FaHome 
 } from "react-icons/fa";
 
 type sidebarProps = {
