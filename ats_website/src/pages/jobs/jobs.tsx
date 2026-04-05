@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useEffect } from 'react';
 const Jobs = () => {
     const dispatch = useAppDispatch();
-    const { Jobs, loading } = useAppSelector((state) => state.jobs)
+    const { Jobs} = useAppSelector((state) => state.jobs)
 
     useEffect(() => {
         dispatch(fetchJobs());

@@ -21,7 +21,7 @@ const AddJobs = () => {
     useEffect(() => {
         if (isEditMode) {
             const fetchJobDetails = async () => {
-                const { data, error } = await supabase.from('jobs').select('*').eq('id', id).single();
+                const { data } = await supabase.from('jobs').select('*').eq('id', id).single();
                 if (data) {
                     reset({
                         title: data.title,

@@ -3,7 +3,6 @@ import {
     useReactTable,
     getCoreRowModel,
     flexRender,
-    getPaginationRowModel,
     getSortedRowModel,
 
 } from '@tanstack/react-table';
