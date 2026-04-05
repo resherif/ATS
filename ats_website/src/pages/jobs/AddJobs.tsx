@@ -166,8 +166,8 @@ const AddJobs = () => {
                     />
                 </div>
 
-                <div className="md:col-span-2 flex items-center justify-between mt-4">
-                    <div className="flex items-center gap-4">
+                <div className="md:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
+                    <div className="flex items-center gap-4 flex-wrap">
                         <label className="font-semibold">Status:</label>
                         <label className="flex items-center gap-1">
                             <input type="radio" value="Draft" {...register("status")} /> Draft
@@ -179,7 +179,7 @@ const AddJobs = () => {
                     <button
                         disabled={isSubmitting}
                         type='submit'
-                        className={`px-6 py-2 rounded text-white font-bold ${isSubmitting ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 transition'}`}
+                        className={`w-full sm:w-auto px-6 py-2 rounded text-white font-bold ${isSubmitting ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 transition'}`}
                     >
                         {isSubmitting ? "Processing..." : isEditMode ? "Update Job" : "Create Job"}
                     </button>

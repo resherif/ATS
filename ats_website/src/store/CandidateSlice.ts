@@ -147,7 +147,7 @@ export const fetchCandidates = createAsyncThunk("candidates/fetchCandidates",asy
     return data as Candidates[];
 
 });
-export const deleteCandidates = createAsyncThunk('candidates/deleteCandidates', async (candidate_id:number) => {
+export const deleteCandidates = createAsyncThunk('candidates/deleteCandidates', async (candidate_id:string) => {
     const { error } = await supabase.from('candidates').delete().eq("candidate_id", candidate_id);
     if(error) throw new Error(error.message)
     return candidate_id;

@@ -16,7 +16,7 @@ function App() {
 
       <div className="flex flex-1">
 
-        <Sidebar isOpen={IsOpen} />
+        <Sidebar isOpen={IsOpen} setIsOpen={setBarMenuIsOpen} />
 
 
         <main className={`flex-1 pt-14 transition-all duration-300 ${IsOpen ? 'ml-64' : 'ml-0'}`}>
