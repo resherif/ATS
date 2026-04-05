@@ -14,10 +14,7 @@ export const Sidebar = ({ isOpen }: sidebarProps) => {
             </div>
             <nav className="flex flex-col gap-2 px-3">
                 <NavLink to='/' className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}>
-                  <FaHome /> Home
-                </NavLink>
-                <NavLink to='/dashboard' className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}>
-                    <FaChartPie /> Dashboard
+                  <FaChartPie />Dashboard
                 </NavLink>
                 <NavLink to='/Jobs' className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 text-slate-400 hover:text-white'}`}>
                     <FaBriefcase /> Jobs

@@ -12,10 +12,10 @@ export type Job = {
     posted_at: string
 };
 export interface Candidates{
-   candidate_id: number,
+   candidate_id: string,
     candidate_name: string,
     email: string,
-    created_at: Date,
+    created_at: string,
     skills:{
         skill_name: string,
         skill_id:number

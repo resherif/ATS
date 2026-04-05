@@ -22,8 +22,8 @@ function App() {
         <main className={`flex-1 pt-14 transition-all duration-300 ${IsOpen ? 'ml-64' : 'ml-0'}`}>
           <div className="p-8">
             <Routes>
-              <Route path='/' element={<>Hello</>} />
-              <Route path='/dashboard' element={<Dashboard />} />
+             
+              <Route path='/' element={<Dashboard />} />
               <Route path='/jobs' element={<Jobs />} />
               <Route path='/jobs/AddJobs' element={<AddJobs />} />
               <Route path="/jobs/AddJobs/:id" element={<AddJobs />} />

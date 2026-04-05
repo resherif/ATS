@@ -4,6 +4,7 @@ export const columns: ColumnDef<Candidates>[] = [
     {
         accessorKey: "candidate_name",
         header: 'candidate_name',
+        enableSorting: false,
         cell: ({ row }) => <div className="font-medium text-gray-900  ">
             {row.getValue("candidate_name")}
 
@@ -13,11 +14,12 @@ export const columns: ColumnDef<Candidates>[] = [
     {
         accessorKey: 'role',
         header: 'Position',
-
+        enableSorting: false,
     },
     {
         accessorKey: "status",
         header: 'status',
+          enableSorting: true,
         cell: ({ row }) => {
             const status = row.getValue("status") as string;
             const colors: Record<string, string> = {
@@ -35,12 +37,15 @@ export const columns: ColumnDef<Candidates>[] = [
     },
     {
         accessorKey: "applied_at",
+          enableSorting: true,
         header: "Date Applied",
-        cell: ({ row }) => new Date(row.getValue("applied_at")).toLocaleDateString()
+        cell: ({ row }) => new Date(row.getValue("applied_at")).toLocaleDateString(),
+        
     },
     {
         accessorKey: "resume_url",
         header: "Resume",
+          enableSorting: false,
         cell: ({ row }) => (
             <a
                 href={row.getValue("resume_url")}
@@ -53,6 +58,7 @@ export const columns: ColumnDef<Candidates>[] = [
     }, {
         id: 'actions',
         header: "Actions",
+          enableSorting: false,
         cell: ({ row, table }) => {
             const candidateId = row.original.candidate_id;
         return (
