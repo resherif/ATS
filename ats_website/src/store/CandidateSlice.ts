@@ -3,150 +3,40 @@ import { supabase } from "../utils/supabaseClient";
 import type { Candidates } from '../types/type';
 type CandidateState = {
     Candidate: Candidates[],
+    selectedCandidate: Candidates | null,
+    profileLoading:boolean,
     loading: boolean,
-    error:string|null
+    error: string | null,
+    totalCount:number,
 }
 const initialState: CandidateState = {
-    Candidate:  [
-    {
-        candidate_id: '1',
-        candidate_name: "Reham Sherif",
-        email: "reham@example.com",
-        created_at: "2026-04-01T10:00:00Z",
-        skills: [
-            { skill_id: 101, skill_name: "React" },
-            { skill_id: 102, skill_name: "TypeScript" }
-        ],
-        application_id: 501,
-        job_id: 10,
-        status: "Interviewing",
-        applied_at: "2026-04-02T12:30:00Z",
-        resume_url: "https://example.com/resume-reham.pdf",
-        role: "Frontend Developer"
-    },
-    {
-        candidate_id: '2',
-        candidate_name: "Ahmed Ali",
-        email: "ahmed@example.com",
-        created_at: "2026-03-28T09:00:00Z",
-        skills: [
-            { skill_id: 103, skill_name: "Node.js" },
-            { skill_id: 104, skill_name: "PostgreSQL" }
-        ],
-        application_id: 502,
-        job_id: 11,
-        status: "Hired",
-        applied_at: "2026-03-29T15:00:00Z",
-        resume_url: "https://example.com/resume-ahmed.pdf",
-        role: "Backend Developer"
-        },
-    {
-        candidate_id: '1',
-        candidate_name: "Reham Sherif",
-        email: "reham@example.com",
-        created_at: "2026-04-01T10:00:00Z",
-        skills: [
-            { skill_id: 101, skill_name: "React" },
-            { skill_id: 102, skill_name: "TypeScript" }
-        ],
-        application_id: 501,
-        job_id: 10,
-        status: "Interviewing",
-        applied_at: "2026-04-02T12:30:00Z",
-        resume_url: "https://example.com/resume-reham.pdf",
-        role: "Frontend Developer"
-    },
-    {
-        candidate_id: '2',
-        candidate_name: "Ahmed Ali",
-        email: "ahmed@example.com",
-        created_at: "2026-03-28T09:00:00Z",
-        skills: [
-            { skill_id: 103, skill_name: "Node.js" },
-            { skill_id: 104, skill_name: "PostgreSQL" }
-        ],
-        application_id: 502,
-        job_id: 11,
-        status: "Hired",
-        applied_at: "2026-03-29T15:00:00Z",
-        resume_url: "https://example.com/resume-ahmed.pdf",
-        role: "Backend Developer"
-        },
-    {
-        candidate_id: '1',
-        candidate_name: "Reham Sherif",
-        email: "reham@example.com",
-        created_at: "2026-04-01T10:00:00Z",
-        skills: [
-            { skill_id: 101, skill_name: "React" },
-            { skill_id: 102, skill_name: "TypeScript" }
-        ],
-        application_id: 501,
-        job_id: 10,
-        status: "Interviewing",
-        applied_at: "2026-04-02T12:30:00Z",
-        resume_url: "https://example.com/resume-reham.pdf",
-        role: "Frontend Developer"
-    },
-    {
-        candidate_id: '2',
-        candidate_name: "Ahmed Ali",
-        email: "ahmed@example.com",
-        created_at: "2026-03-28T09:00:00Z",
-        skills: [
-            { skill_id: 103, skill_name: "Node.js" },
-            { skill_id: 104, skill_name: "PostgreSQL" }
-        ],
-        application_id: 502,
-        job_id: 11,
-        status: "Hired",
-        applied_at: "2026-03-29T15:00:00Z",
-        resume_url: "https://example.com/resume-ahmed.pdf",
-        role: "Backend Developer"
-    },{
-        candidate_id: '1',
-        candidate_name: "Reham Sherif",
-        email: "reham@example.com",
-        created_at: "2026-04-01T10:00:00Z",
-        skills: [
-            { skill_id: 101, skill_name: "React" },
-            { skill_id: 102, skill_name: "TypeScript" }
-        ],
-        application_id: 501,
-        job_id: 10,
-        status: "Interviewing",
-        applied_at: "2026-04-02T12:30:00Z",
-        resume_url: "https://example.com/resume-reham.pdf",
-        role: "Frontend Developer"
-    },
-    {
-        candidate_id: '2',
-        candidate_name: "Ahmed Ali",
-        email: "ahmed@example.com",
-        created_at: "2026-03-28T09:00:00Z",
-        skills: [
-            { skill_id: 103, skill_name: "Node.js" },
-            { skill_id: 104, skill_name: "PostgreSQL" }
-        ],
-        application_id: 502,
-        job_id: 11,
-        status: "Hired",
-        applied_at: "2026-03-29T15:00:00Z",
-        resume_url: "https://example.com/resume-ahmed.pdf",
-        role: "Backend Developer"
-    }
-],
+    Candidate:  [],
+    selectedCandidate: null,
+    profileLoading:false,
+    totalCount:0,
     loading: false,
     error:null,
 }
-export const fetchCandidates = createAsyncThunk("candidates/fetchCandidates",async ({}) => {
-  
-    const { data, error } = await supabase.from('candidate_list_view').select('*').order("applied_at", {  ascending: false });
-    if (error) throw new Error(error.message);
-   
-    return data as Candidates[];
+export const fetchCandidates = createAsyncThunk<{ data: Candidates[]; totalCount: number }, { pageIndex: number; pageSize: number }>(
+    "candidates/fetchCandidates",
+    async ({ pageIndex, pageSize }) => {
+        const from = pageIndex * pageSize;
+        const to = from + pageSize - 1;
+        const { data, error, count } = await supabase
+            .from('candidate_list_view')
+            .select('*', { count: 'exact' })
+            .order("applied_at", { ascending: false })
+            .range(from, to);
+        if (error) throw new Error(error.message);
 
-});
+        return { data: data as Candidates[], totalCount: count ?? 0 };
+    }
+);
+export const fetchCandidateById = createAsyncThunk('candidates/fetchCandidateById', async (candidateId: string) => {
+    const { data, error } = await supabase.from('candidate_list_view').select('*').eq('candidate_id', candidateId).single();
+    if (error) throw new Error(error.message);
+    return data as Candidates;
+})
 export const deleteCandidates = createAsyncThunk('candidates/deleteCandidates', async (candidate_id:string) => {
     const { error } = await supabase.from('candidates').delete().eq("candidate_id", candidate_id);
     if(error) throw new Error(error.message)
@@ -155,25 +45,43 @@ export const deleteCandidates = createAsyncThunk('candidates/deleteCandidates', 
 const CandidateSlice = createSlice({
     name: 'Candidate',
     initialState,
-    reducers: {},
-    extraReducers:(builder) =>{
-    builder .addCase(fetchCandidates.pending, (state) => {
-                    state.loading = true;
-                    state.error = null;
-                })
-                .addCase(fetchCandidates.fulfilled, (state, action: PayloadAction<Candidates[]>) => {
+    reducers: {
+        clearSelectedCandidate(state) {
+            state.selectedCandidate = null;
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchCandidates.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+            .addCase(
+                fetchCandidates.fulfilled,
+                (state, action: PayloadAction<{ data: Candidates[]; totalCount: number }>) => {
                     state.loading = false;
-                    state.Candidate = action.payload;
-    
-                })
-                .addCase(fetchCandidates.rejected, (state, action) => {
-                    state.loading = false;
-                    state.error = action.error.message ?? 'failed to fetch Candidates'
-                })
-                .addCase(deleteCandidates.fulfilled, (state, action) => {
-                    state.Candidate = state.Candidate.filter((Candidate) => Candidate.candidate_id !== action.payload.toString());
-                });
+                    state.Candidate = action.payload.data;
+                    state.totalCount = action.payload.totalCount;
+                }
+            )
+            .addCase(fetchCandidates.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message ?? 'failed to fetch Candidates'
+            })
+            .addCase(fetchCandidateById.pending, (state) => {
+                state.profileLoading = true;
+            }).addCase(fetchCandidateById.fulfilled, (state, action: PayloadAction<Candidates>) => {
+                state.profileLoading = false;
+                state.selectedCandidate = action.payload;
+            }).addCase(fetchCandidateById.rejected, (state, action) => {
+                state.profileLoading = false;
+                state.error = action.error.message ?? 'Failed to fetch candidate';
+            })
+            .addCase(deleteCandidates.fulfilled, (state, action) => {
+                state.Candidate = state.Candidate.filter((Candidate) => Candidate.candidate_id !== action.payload.toString());
+                state.totalCount = Math.max(0, state.totalCount - 1);
+            });
 
     }
-})
+});
+export const { clearSelectedCandidate } = CandidateSlice.actions;
 export default CandidateSlice.reducer;

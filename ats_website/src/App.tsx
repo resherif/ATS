@@ -6,6 +6,7 @@ import Dashboard from './pages/dashboard';
 import Jobs from './pages/jobs/jobs';
 import AddJobs from './pages/jobs/AddJobs';
 import CandidatesPage from './pages/candidates/candidates'
+import CandidateProfile from './pages/candidates/candidateProfile'
 function App() {
   const [IsOpen, setBarMenuIsOpen] = useState(true);
 
@@ -28,6 +29,7 @@ function App() {
               <Route path='/jobs/AddJobs' element={<AddJobs />} />
               <Route path="/jobs/AddJobs/:id" element={<AddJobs />} />
               <Route path='/candidates' element={<CandidatesPage />} />
+              <Route path='/candidates/:id' element={<CandidateProfile/>}/>
             </Routes>
 
           </div>
