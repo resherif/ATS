@@ -16,7 +16,7 @@ export const fetchJobs = createAsyncThunk('jobs/fetchJobs', async () => {
     if (error) throw new Error(error.message);
     return data as Job[];
 });
-export const deleteJob = createAsyncThunk("Jobs/deleteJob", async (id: string) => {
+export const deleteJob = createAsyncThunk("Jobs/deleteJob", async (id: number) => {
     const { error } = await supabase.from('jobs').delete().eq('id', id);
     if (error) throw new Error(error.message);
     return id;

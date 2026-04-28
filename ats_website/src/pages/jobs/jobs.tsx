@@ -2,15 +2,30 @@ import { Link } from 'react-router-dom';
 import { fetchJobs, deleteJob } from '../../store/jobSlice';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useEffect } from 'react';
+import { applyToJob } from '../../store/ApplicationSlice';
+
 const Jobs = () => {
     const dispatch = useAppDispatch();
-    const { Jobs} = useAppSelector((state) => state.jobs)
-
+    const { Jobs, loading, error } = useAppSelector((state) => state.jobs);
+const handleApply = (jobId: number, candidateId: number) => {
+// مؤقت لحد ما تعملي auth
+  dispatch(applyToJob({ candidate_id: candidateId, job_id: jobId }));
+};  
     useEffect(() => {
         dispatch(fetchJobs());
     }, [dispatch]);
+    if (loading) return (
+        <div className="flex justify-center items-center h-64">
+            <p className="text-slate-400">Loading jobs...</p>
+        </div>
+    );
 
-    const handleDelete = async (id: string) => {
+    if (error) return (
+        <div className="flex justify-center items-center h-64">
+            <p className="text-red-400">Error: {error}</p>
+        </div>
+    );
+    const handleDelete = async (id: number) => {
         if (window.confirm('Are you sure')) {
             dispatch(deleteJob(id));
         }
@@ -33,7 +48,7 @@ const Jobs = () => {
                     <thead>
                         <tr className="bg-slate-50 border-b border-slate-200">
                             <th className="px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">Job Title</th>
-                            <th className="px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">Location</th>
+                            <th className="px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">location</th>
                             <th className="px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">Salary</th>
                             <th className="px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
                             <th className="px-6 py-4 text-xs font-semibold text-slate-600 uppercase tracking-wider">Posted At</th>
@@ -44,14 +59,14 @@ const Jobs = () => {
                         {Jobs.length > 0 ? (
                             Jobs.map((job) => (
                                 <tr key={job.id} className="hover:bg-slate-50 transition-colors">
-                                    <td className="px-6 py-4 text-slate-700 font-medium">{job.title}</td>
+                                    <td className="px-6 py-4 text-slate-700 font-medium">{job.job_title}</td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${job.location === 'Remote' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
                                             {job.location}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-slate-600">
-                                        {job.salary_range > 0 ? `$${job.salary_range.toLocaleString()}` : "Not Disclosed"}
+                                        {job.salary_range || "Not Disclosed"}
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${job.status === 'published' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
@@ -59,9 +74,16 @@ const Jobs = () => {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-slate-500 text-sm">
-                                        {job.posted_at ? new Date(job.posted_at).toLocaleDateString() : '---'}
+                                        {job.posted_date ? new Date(job.posted_date).toLocaleDateString() : '---'}
                                     </td>
                                     <td className="px-6 py-4">
+                                        <Link
+                                            to={`/jobs/AddJobs/${job.id}`}
+                                            className="text-blue-600 hover:text-blue-800 text-sm border border-blue-200 px-3 py-1 rounded-md hover:bg-blue-50 transition-all"
+                                            onClick={() => handleApply(job.id, candidate.id)}
+                                        >
+                                            Apply
+                                        </Link>
                                         <div className="flex gap-3">
                                             <Link
                                                 to={`/jobs/AddJobs/${job.id}`}
@@ -96,9 +118,9 @@ const Jobs = () => {
                     <div key={job.id} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
                         <div className="flex justify-between items-start mb-3">
                             <div>
-                                <p className="font-semibold text-slate-800">{job.title}</p>
+                                <p className="font-semibold text-slate-800">{job.job_title}</p>
                                 <p className="text-xs text-slate-400 mt-0.5">
-                                    {job.posted_at ? new Date(job.posted_at).toLocaleDateString() : '---'}
+                                    {job.posted_date ? new Date(job.posted_date).toLocaleDateString() : '---'}
                                 </p>
                             </div>
                             <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${job.status === 'published' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
@@ -110,7 +132,7 @@ const Jobs = () => {
                                 {job.location}
                             </span>
                             <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
-                                {job.salary_range > 0 ? `$${job.salary_range.toLocaleString()}` : "Not Disclosed"}
+                                {job.salary_range || "Not Disclosed"}
                             </span>
                         </div>
                         <div className="flex gap-2 pt-2 border-t border-slate-100">

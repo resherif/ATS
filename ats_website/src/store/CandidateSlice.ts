@@ -17,7 +17,7 @@ const initialState: CandidateState = {
     loading: false,
     error:null,
 }
-export const fetchCandidates = createAsyncThunk<{ data: Candidates[]; totalCount: number }, { pageIndex: number; pageSize: number }>(
+export const fetchCandidates = createAsyncThunk<{ data: Candidates[], totalCount: number }, { pageIndex: number; pageSize: number }>(
     "candidates/fetchCandidates",
     async ({ pageIndex, pageSize }) => {
         const from = pageIndex * pageSize;

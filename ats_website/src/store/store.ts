@@ -2,10 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { type TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import jobsReducer from './jobSlice';
 import CandidatesReducer from './CandidateSlice';
+import ApplicationReducer from './ApplicationSlice';
 export const store = configureStore({
     reducer: {
         jobs: jobsReducer,
-        Candidate:CandidatesReducer,
+        Candidate: CandidatesReducer,
+        applications: ApplicationReducer,
     },
 });
 export type RootState = ReturnType<typeof store.getState>;

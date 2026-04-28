@@ -13,7 +13,7 @@ const AddJobs = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { register, handleSubmit, setError, reset, formState: { errors, isSubmitting } } = useForm<Job>({
         defaultValues: {
-            status: "Draft",
+            status: "draft",
             location: "on-site"
         }
     });
@@ -24,14 +24,14 @@ const AddJobs = () => {
                 const { data } = await supabase.from('jobs').select('*').eq('id', id).single();
                 if (data) {
                     reset({
-                        title: data.title,
-                        Department: data.department,
+                        job_title: data.job_title,
+                        department: data.department,
                         location: data.location,
                         employment_type: data.employment_type,
-                        status: data.Status,
+                        status: data.status,
                         requirements: data.requirements,
-                        Job_Description: data.description,
-                        Experience_Level: data.experience_level,
+                        description: data.description,
+                        experience_level: data.experience_level,
                         salary_range: data.salary_range,
                     });
                 }
@@ -43,14 +43,14 @@ const AddJobs = () => {
         try {
             if (isEditMode) {
                 const { error } = await supabase.from('jobs').update({
-                    title: data.title,
-                    description: data.Job_Description,
-                    department: data.Department,
+                    job_title: data.job_title,
+                    description: data.description,
+                    department: data.department,
                     location: data.location,
                     employment_type: data.employment_type,
-                    Status: data.status,
+                    status: data.status,
                     requirements: data.requirements,
-                    experience_level: data.Experience_Level,
+                    experience_level: data.experience_level,
                     salary_range: data.salary_range,
                 }).eq('id', id);
                 if (error) throw error;
@@ -59,14 +59,14 @@ const AddJobs = () => {
                 navigate('/jobs');
             } else {
                 const { error } = await supabase.from('jobs').insert({
-                    title: data.title,
-                    description: data.Job_Description,
-                    department: data.Department,
+                    job_title: data.job_title,
+                    description: data.description,
+                    department: data.department,
                     location: data.location,
                     employment_type: data.employment_type,
-                    Status: data.status,
+                    status: data.status,
                     requirements: data.requirements,
-                    experience_level: data.Experience_Level,
+                    experience_level: data.experience_level,
                     salary_range: data.salary_range,
                 }).select();
                 if (error) throw error;
@@ -88,16 +88,16 @@ const AddJobs = () => {
                 <div className="flex flex-col gap-2">
                     <label className="font-semibold text-gray-700">Job Title</label>
                     <input
-                        {...register("title", { required: "Title is required" })}
-                        className={`p-2 border rounded ${errors.title ? 'border-red-500' : 'border-gray-300'}`}
+                        {...register("job_title", { required: "Job title is required" })}
+                        className={`p-2 border rounded ${errors.job_title ? 'border-red-500' : 'border-gray-300'}`}
                         placeholder="e.g. Frontend Developer"
                     />
-                    {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
+                    {errors.job_title && <span className="text-red-500 text-sm">{errors.job_title.message}</span>}
                 </div>
 
                 <div className="flex flex-col gap-2">
                     <label className="font-semibold text-gray-700">Department</label>
-                    <select {...register("Department")} className="p-2 border border-gray-300 rounded">
+                    <select {...register("department")} className="p-2 border border-gray-300 rounded">
                         <option value="Engineering">Engineering</option>
                         <option value="Marketing">Marketing</option>
                         <option value="HR">HR</option>
@@ -128,7 +128,7 @@ const AddJobs = () => {
 
                 <div className="flex flex-col gap-2">
                     <label className="font-semibold text-gray-700">Experience Level</label>
-                    <select {...register("Experience_Level")} className="p-2 border border-gray-300 rounded">
+                    <select {...register("experience_level")} className="p-2 border border-gray-300 rounded">
                         <option value="Junior">Junior</option>
                         <option value="Mid">Mid-Level</option>
                         <option value="Senior">Senior</option>
@@ -140,7 +140,7 @@ const AddJobs = () => {
                     <label className="font-semibold text-gray-700">Salary (Monthly)</label>
                     <input
                         type="number"
-                        {...register("salary_range", { valueAsNumber: true })}
+                        {...register("salary_range", { valueAsNumber: false })}
                         className="p-2 border border-gray-300 rounded"
                         placeholder="e.g. 15000"
                     />
@@ -150,11 +150,11 @@ const AddJobs = () => {
                 <div className="flex flex-col gap-2 md:col-span-2">
                     <label className="font-semibold text-gray-700">Job Description</label>
                     <textarea
-                        {...register("Job_Description", { required: "Description is required" })}
+                        {...register("description", { required: "Description is required" })}
                         className="p-2 border border-gray-300 rounded h-32"
                         placeholder="Describe the role..."
                     />
-                    {errors.Job_Description && <span className="text-red-500 text-sm">{errors.Job_Description.message}</span>}
+                    {errors.description && <span className="text-red-500 text-sm">{errors.description.message}</span>}
                 </div>
 
                 <div className="flex flex-col gap-2 md:col-span-2">

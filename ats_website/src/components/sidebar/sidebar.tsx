@@ -11,7 +11,7 @@ type sidebarProps = {
 export const Sidebar = ({ isOpen, setIsOpen }: sidebarProps) => {
     const location = useLocation();
     useEffect(() => {
-        if (window.innerWidth < 768) {
+        if (window.innerWidth < 300) {
             setIsOpen(false);
         }
     }, [location.pathname]);
@@ -37,13 +37,14 @@ export const Sidebar = ({ isOpen, setIsOpen }: sidebarProps) => {
                         { to: '/Jobs', icon: <FaBriefcase />, label: 'Jobs' },
                         { to: '/Candidates', icon: <FaUsers />, label: 'Candidates' },
                         { to: '/Settings', icon: <FaCog />, label: 'Settings' },
+                        { to: '/Applications', icon: <FaHome />, label: 'Applications' },
                     ].map(({ to, icon, label }) => (
                         <NavLink
                             key={to}
                             to={to}
                             onClick={() => {
                                 // close sidebar on mobile after navigation
-                                if (window.innerWidth < 768) setIsOpen(false);
+                                if (window.innerWidth < 300) setIsOpen(false);
                             }}
                             className={({ isActive }) =>
                                 `flex items-center gap-3 px-4 py-3 rounded-lg transition-all
