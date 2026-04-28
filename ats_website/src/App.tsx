@@ -9,7 +9,7 @@ import CandidatesPage from './pages/candidates/candidates'
 import CandidateProfile from './pages/candidates/candidateProfile'
 import Applications from './pages/Applications/Applications';
 function App() {
-  const [IsOpen, setBarMenuIsOpen] = useState(true);
+  const [IsOpen, setBarMenuIsOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
