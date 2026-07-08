@@ -27,15 +27,17 @@ export const applyToJob = createAsyncThunk(
   "applications/applyToJob",
     async ({ candidate_id, job_id }: { candidate_id: number; job_id: number }) => {
       
-    const { error } = await supabase
+    const {data, error } = await supabase
       .from("applications")
       .insert({
         candidate_id: candidate_id,
         job_id: job_id,
-        status: "Pending",
-      });
+        status: "Applied",
+      }).select()
+      .single();
 
-    if (error) throw new Error(error.message);
+      if (error) throw new Error(error.message);
+    return data as Application;
   }
 );
 export const deleteApplications = createAsyncThunk('applications/deleteApplications', async (application_id: number
@@ -71,13 +73,19 @@ const applicationSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(applyToJob.fulfilled, (state) => {
+      .addCase(applyToJob.fulfilled, (state,action:PayloadAction<Application>) => {
         state.loading = false;
         state.success = true;
+        state.Applications.push(action.payload);
       })
       .addCase(applyToJob.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || "Apply failed";
+      })
+      .addCase(deleteApplications.fulfilled, (state, action: PayloadAction<number>) => {
+        state.Applications = state.Applications.filter(
+          (app) => app.application_id !== action.payload
+        );
       });
   },
 });
