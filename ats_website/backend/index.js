@@ -8,9 +8,9 @@ const candidatesRoute = require('./routes/candidatesRoute');
 const ApplicationsRoute = require('./routes/ApplicationsRoute');
 app.use(express.json());
 app.use(cors());
-app.use('/api/jobs', jobsRoute);
-app.use('/api/candidates',candidatesRoute);
-app.use('/api/applications', ApplicationsRoute);
+app.use('/jobs', jobsRoute);
+app.use('/candidates',candidatesRoute);
+app.use('/applications', ApplicationsRoute);
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'ATS Backend API is running successfully!' });
 });
