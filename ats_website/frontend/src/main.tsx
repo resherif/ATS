@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store} >
-      <BrowserRouter basename={'/ATS'}>
+      <BrowserRouter >
         <App />
       </BrowserRouter>
     </Provider>
