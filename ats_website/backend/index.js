@@ -10,7 +10,10 @@ app.use(express.json());
 app.use(cors());
 app.use('/api/jobs', jobsRoute);
 app.use('/api/candidates',candidatesRoute);
-app.use('/api/applications',ApplicationsRoute);
+app.use('/api/applications', ApplicationsRoute);
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'ATS Backend API is running successfully!' });
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`server is running ${PORT}`);
